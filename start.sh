@@ -1,0 +1,1 @@
+./watch --command="./todolist-api"

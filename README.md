@@ -24,6 +24,41 @@ type Todo struct {
 }
 ```
 
+## Access with Axios and jQuery
+
+```js
+// Axios
+axios.post('http://localhost:8888/todo/create', {content:"buy a book"}).then(resp => console.log(resp.data));
+axios.get('http://localhost:8888/todos').then(resp => console.log(resp.data));
+
+// jQuery
+$.ajax({
+  url: 'http://localhost:8888/todo/create',
+  method: 'POST',
+  contentType: 'application/json',
+  data: JSON.stringify({content:"buy a book"}),
+  success: function (todo) {
+    console.log(todo)
+  },
+  error: function (xhr, status) {
+    console.error("error");
+  }
+});
+
+$.ajax({
+  url: "http://localhost:8888/todos",
+  type: "GET",
+  crossDomain: true,
+  dataType: "json",
+  success: function (todos) {
+    console.log(todos)
+  },
+  error: function (xhr, status) {
+    console.error("error");
+  }
+});
+```
+
 ## License
 
 [MIT](https://github.com/aztack/todolist-api/blob/master/LICENSE)

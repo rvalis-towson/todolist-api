@@ -14,6 +14,7 @@ import (
  */
 type Todo struct {
 	ID      uint   `json:"id"`
+	Done    bool   `json:"done"`
 	Content string `json:"content"`
 }
 
@@ -35,6 +36,7 @@ func main() {
 	}))
 
 	r.POST("/todo/create", createTodo)
+	r.POST("/todo/update", updateTodo)
 	r.GET("/todo/:id", getTodo)
 	r.GET("/todos", getAllTodos)
 	r.DELETE("/todo/:id", delTodo)
@@ -47,6 +49,28 @@ func createTodo(c *gin.Context) {
 	c.BindJSON(&todo)
 	db.Create(&todo)
 	c.JSON(200, todo)
+}
+
+func updateTodo(c *gin.Context) {
+	c.Header("Content-Type", "application/json")
+	var todo Todo
+	var todoBind Todo
+
+	if c.ShouldBind(&todoBind) == nil {
+		id := todoBind.ID
+		if err := db.Where("id = ?", id).First(&todo).Error; err != nil {
+			c.AbortWithStatus(404)
+		} else {
+			todo.Done = todoBind.Done
+			if todoBind.Content != "" {
+				todo.Content = todoBind.Content
+			}
+			db.Save(&todo)
+			c.JSON(200, todo)
+		}
+	} else {
+		c.AbortWithStatus(404)
+	}
 }
 
 func getTodo(c *gin.Context) {

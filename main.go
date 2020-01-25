@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -13,9 +14,10 @@ import (
  * Todo struct
  */
 type Todo struct {
-	ID      uint   `json:"id"`
-	Done    bool   `json:"done"`
-	Content string `json:"content"`
+	ID        uuid.UUID `json:"id"`
+	Completed bool      `json:"completed"`
+	Content   string    `json:"content"`
+	Title     string    `json:"title"`
 }
 
 var db *gorm.DB
@@ -47,6 +49,7 @@ func createTodo(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
 	var todo Todo
 	c.BindJSON(&todo)
+	todo.ID = uuid.New()
 	db.Create(&todo)
 	c.JSON(200, todo)
 }
@@ -61,9 +64,12 @@ func updateTodo(c *gin.Context) {
 		if err := db.Where("id = ?", id).First(&todo).Error; err != nil {
 			c.AbortWithStatus(404)
 		} else {
-			todo.Done = todoBind.Done
+			todo.Completed = todoBind.Completed
 			if todoBind.Content != "" {
 				todo.Content = todoBind.Content
+			}
+			if todoBind.Title != "" {
+				todo.Title = todoBind.Title
 			}
 			db.Save(&todo)
 			c.JSON(200, todo)

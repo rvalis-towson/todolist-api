@@ -10,19 +10,21 @@
 
 ## API
 
-- curl -i -X POST http://localhost:8888/todo/create -H "Content-Type: application/json" -d '{"content":"buy me a cup of coffee"}'
+- curl -i -X POST http://localhost:8888/todo/create -H "Content-Type: application/json" -d '{"content":"buy me a cup of coffee", "title": "hello", "image_url": "http://..." }'
 - curl -i -X GET  http://localhost:8888/todos
 - curl -i -X GET  http://localhost:8888/todo/:id
 - curl -i -X DELETE http://localhost:8888/todo/:id
-- curl -i -X POST http://localhost:8888/todo/update -H "Content-Type: application/json" -d '{"id": 1, "done": true, "content": "update"}'
+- curl -i -X POST http://localhost:8888/todo/update -H "Content-Type: application/json" -d '{"id": '111-11111-1111111', "completed": true, "contents": "update"}'
 
 ## Struct
 
 ```go
 type Todo struct {
-  ID      uint   `json:"id"`
-  Done    bool   `json:"done"`
-	Content string `json:"content"`
+  ID      uuid.UUID   `json:"id"`
+  Contents string `json:"contents"`
+  Title   string `json:"title"`
+  Completed bool `json:"completed"`
+  ImageURL string `json:"image_url"`
 }
 ```
 

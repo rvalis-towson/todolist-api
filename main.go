@@ -16,8 +16,9 @@ import (
 type Todo struct {
 	ID        uuid.UUID `json:"id"`
 	Completed bool      `json:"completed"`
-	Content   string    `json:"content"`
+	Contents  string    `json:"contents"`
 	Title     string    `json:"title"`
+	ImageURL  string    `json:"image_url"`
 }
 
 var db *gorm.DB
@@ -65,11 +66,14 @@ func updateTodo(c *gin.Context) {
 			c.AbortWithStatus(404)
 		} else {
 			todo.Completed = todoBind.Completed
-			if todoBind.Content != "" {
-				todo.Content = todoBind.Content
+			if todoBind.Contents != "" {
+				todo.Contents = todoBind.Contents
 			}
 			if todoBind.Title != "" {
 				todo.Title = todoBind.Title
+			}
+			if todoBind.ImageURL != "" {
+				todo.ImageURL = todoBind.ImageURL
 			}
 			db.Save(&todo)
 			c.JSON(200, todo)

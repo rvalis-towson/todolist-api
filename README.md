@@ -14,7 +14,7 @@
 - curl -i -X GET  http://localhost:8888/todos
 - curl -i -X GET  http://localhost:8888/todo/:id
 - curl -i -X DELETE http://localhost:8888/todo/:id
-- curl -i -X POST http://localhost:8888/todo/update -H "Content-Type: application/json" -d '{"id": '111-11111-1111111', "completed": true, "contents": "update"}'
+- curl -i -X PUT http://localhost:8888/todo/111-11111-1111111 -H "Content-Type: application/json" -d '{"completed": true, "contents": "update"}'
 
 ## Struct
 

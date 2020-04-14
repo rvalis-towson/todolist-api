@@ -39,7 +39,7 @@ func main() {
 	}))
 
 	r.POST("/todo/create", createTodo)
-	r.POST("/todo/update", updateTodo)
+	r.PUT("/todo/:id", updateTodo)
 	r.GET("/todo/:id", getTodo)
 	r.GET("/todos", getAllTodos)
 	r.DELETE("/todo/:id", delTodo)
@@ -61,9 +61,10 @@ func updateTodo(c *gin.Context) {
 	var todoBind Todo
 
 	if c.ShouldBind(&todoBind) == nil {
-		id := todoBind.ID
+		id := c.Params.ByName("id")
 		if err := db.Where("id = ?", id).First(&todo).Error; err != nil {
 			c.AbortWithStatus(404)
+			fmt.Println(err)
 		} else {
 			todo.Completed = todoBind.Completed
 			if todoBind.Contents != "" {
